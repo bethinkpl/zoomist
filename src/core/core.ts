@@ -319,7 +319,7 @@ class Zoomist {
 
   // resize, drag, pinch, wheel
   #interact() {
-    const { wrapper, options, controller: { signal } } = this
+    const { element, wrapper, options, controller: { signal } } = this
     const { draggable, pinchable, wheelable } = options
 
     this.states = {}
@@ -340,7 +340,7 @@ class Zoomist {
 
       const useTouch = (e: AppTouchEvent) => this.#useTouch(e)
 
-      wrapper.addEventListener('touchstart', useTouch, { signal })
+      element.addEventListener('touchstart', useTouch, { signal })
     }
 
     // if is mouse event && draggable
@@ -349,7 +349,7 @@ class Zoomist {
 
       const useDrag = (e: MouseEvent) => this.#useDrag(e)
 
-      wrapper.addEventListener('mousedown', useDrag, { signal })
+      element.addEventListener('mousedown', useDrag, { signal })
     }
 
     // resize observer
@@ -470,7 +470,6 @@ class Zoomist {
         const isOnBoundX = this.isOnBoundX()
         const isOnBoundY = this.isOnBoundY()
         const releasable = touches.length === 1 && (isOnBoundX || isOnBoundY)
-        console.log(releasable)
 
         if (!releasable) {
           e.preventDefault()
