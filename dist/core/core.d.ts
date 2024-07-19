@@ -1,5 +1,4 @@
 import { ZoomistOptions, ZoomistDefaultOptions, ZoomistData, ZoomistEvents, ZoomistMethods, ZoomistStates, ZoomistModules, ZoomistTransfrom } from '../types';
-
 interface Zoomist extends ZoomistMethods {
 }
 declare class Zoomist {

@@ -1,5 +1,4 @@
 import { StyleObject, PointerData, BoundingRect, AppTouchEvent } from './../types';
-
 export declare const isElementExist: (value: HTMLElement | string) => boolean;
 export declare const isPlainObject: (value: object | void) => boolean;
 export declare const isFunction: (value: any) => boolean;
@@ -10,7 +9,7 @@ export declare const getClosestElement: (target: HTMLElement, className: string)
 export declare const getPointer: (e: MouseEvent | AppTouchEvent) => PointerData;
 export declare const getTouchesCenter: (touches: TouchList) => PointerData;
 export declare const getBoundingRect: (target: HTMLElement) => BoundingRect;
-export declare const getPinchHypot: (touches: AppTouchEvent["touches"]) => number;
+export declare const getPinchHypot: (touches: AppTouchEvent['touches']) => number;
 export declare const setStyle: (element: HTMLElement, value: StyleObject) => void;
 export declare const setAttributes: (element: HTMLElement, value: Record<string, string>) => void;
 export declare const setObject: <T, K extends keyof T>(obj: T, value: Pick<T, K>) => void;
