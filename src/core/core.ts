@@ -330,7 +330,7 @@ class Zoomist {
 
       const useWheel = (e: WheelEvent) => this.#useWheel(e)
 
-      wrapper.addEventListener(EVENT_WHEEL, useWheel, { signal })
+      wrapper.addEventListener(EVENT_WHEEL, useWheel, { signal, passive: false })
     }
 
     // if is mobile device && (draggable || pinchable)
