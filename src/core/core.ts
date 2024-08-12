@@ -132,9 +132,9 @@ class Zoomist {
 
   // create initial data
   #create() {
-    const { element, image, options } = this
+    const { wrapper, image, options } = this
     const { draggable, pinchable } = options
-    const { offsetWidth: containerWidth, offsetHeight: containerHeight } = element
+    const { offsetWidth: containerWidth, offsetHeight: containerHeight } = wrapper
     const { offsetWidth: originImageWidth, offsetHeight: originImageHeight } = image
     const { width: imageWidth, height: imageHeight } = getBoundingRect(image)
     if (!originImageWidth || !originImageHeight) return useWarn(`The width or height of ${CLASS_IMAGE} should not be 0.`)
@@ -219,7 +219,7 @@ class Zoomist {
 
     setStyle(image, {
       transform: `
-        translate(var(${CSSVAR_IMAGE_TRANSLATE_X}, 0px), var(${CSSVAR_IMAGE_TRANSLATE_Y}, 0px))
+        translate3d(var(${CSSVAR_IMAGE_TRANSLATE_X}, 0px), var(${CSSVAR_IMAGE_TRANSLATE_Y}, 0px), 0)
         scale(var(${CSSVAR_IMAGE_SCALE}, 0))`
     })
 
@@ -319,7 +319,7 @@ class Zoomist {
 
   // resize, drag, pinch, wheel
   #interact() {
-    const { wrapper, options, controller: { signal } } = this
+    const { element, wrapper, options, controller: { signal } } = this
     const { draggable, pinchable, wheelable } = options
 
     this.states = {}
@@ -330,7 +330,7 @@ class Zoomist {
 
       const useWheel = (e: WheelEvent) => this.#useWheel(e)
 
-      wrapper.addEventListener(EVENT_WHEEL, useWheel, { signal })
+      wrapper.addEventListener(EVENT_WHEEL, useWheel, { signal, passive: false })
     }
 
     // if is mobile device && (draggable || pinchable)
@@ -340,7 +340,7 @@ class Zoomist {
 
       const useTouch = (e: AppTouchEvent) => this.#useTouch(e)
 
-      wrapper.addEventListener('touchstart', useTouch, { signal })
+      element.addEventListener('touchstart', useTouch, { signal })
     }
 
     // if is mouse event && draggable
@@ -349,7 +349,7 @@ class Zoomist {
 
       const useDrag = (e: MouseEvent) => this.#useDrag(e)
 
-      wrapper.addEventListener('mousedown', useDrag, { signal })
+      element.addEventListener('mousedown', useDrag, { signal })
     }
 
     // resize observer
@@ -380,7 +380,7 @@ class Zoomist {
 
     // prevent wheeling too fast
     this.states.wheeling = true
-    setTimeout(() => { this.states.wheeling = false }, 30)
+    setTimeout(() => { this.states.wheeling = false }, 15)
 
     this.zoom(delta * zoomRatio, getPointer(e))
 
@@ -397,6 +397,7 @@ class Zoomist {
     // dragStart
     const dragStart = (e: MouseEvent) => {
       if (e && e.button !== 0) return;
+      if (!this.options.draggable) return;
 
       e.preventDefault()
 
@@ -463,12 +464,12 @@ class Zoomist {
     const touchStart = (e: AppTouchEvent) => {
       const touches = e.touches
       if (!touches) return;
+      if (!this.options.draggable) return;
 
       if (bounds && dragReleaseOnBounds) {
         const isOnBoundX = this.isOnBoundX()
         const isOnBoundY = this.isOnBoundY()
         const releasable = touches.length === 1 && (isOnBoundX || isOnBoundY)
-        console.log(releasable)
 
         if (!releasable) {
           e.preventDefault()
@@ -588,10 +589,10 @@ class Zoomist {
 
   // resize observer on element
   #useResizeObserver() {
-    const { element, image, transform } = this
+    const { wrapper, image, transform } = this
 
     const observer = new ResizeObserver(() => {
-      const { offsetWidth: containerWidth, offsetHeight: containerHeight } = element
+      const { offsetWidth: containerWidth, offsetHeight: containerHeight } = wrapper
       const { width: containerDataWidth, height: containerDataHeight } = this.getContainerData()
       if (containerWidth === containerDataWidth && containerHeight === containerDataHeight) return;
 
@@ -628,7 +629,7 @@ class Zoomist {
       this.emit('resize', this)
     })
 
-    observer.observe(element)
+    observer.observe(wrapper)
   }
 
   // check modules and create
