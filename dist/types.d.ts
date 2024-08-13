@@ -3,10 +3,12 @@ export interface ZoomistHTMLElement extends HTMLElement {
     zoomist: Zoomist | null;
 }
 export interface ZoomistDefaultOptions {
+    dblClickable: boolean;
     draggable: boolean;
     wheelable: boolean;
     pinchable: boolean;
     bounds: boolean;
+    dblClickZoomRatio: number;
     zoomRatio: number;
     minScale: number;
     maxScale: number;
@@ -34,6 +36,7 @@ export interface ZoomerOptions {
     disabledClass: string | false | null;
 }
 export interface EventOptions {
+    dblClick: (zoomist: Zoomist, scale: number, event: MouseEvent | TouchEvent) => void;
     drag: (zoomist: Zoomist, transform: {
         x: number;
         y: number;
@@ -163,6 +166,9 @@ export interface DragData {
     startX: number;
     startY: number;
 }
+export interface DblTouchData {
+    lastTouchTime: number;
+}
 export interface touchData {
     hypot: number;
     startX: number;
@@ -177,6 +183,7 @@ export interface touchData {
 export interface ZoomistData {
     imageData: ImageData;
     containerData: ContainerData;
+    dblTouchData: DblTouchData;
     dragData?: DragData;
     touchData?: touchData;
 }
