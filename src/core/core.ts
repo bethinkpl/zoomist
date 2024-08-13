@@ -355,11 +355,14 @@ class Zoomist {
       element.addEventListener('mousedown', useDrag, { signal })
     }
 
-    if (dblClickable && image) {
-        const useDblTouch = (e: TouchEvent) => this.#useDblTouch(e);
-        const useDblClick = (e: MouseEvent) => this.#useDblClick(e);
-        image.addEventListener('touchstart', useDblTouch);
-        image.addEventListener('dblclick', useDblClick, { signal })
+    if (IS_TOUCH && dblClickable && image) {
+      const useDblTouch = (e: TouchEvent) => this.#useDblTouch(e);
+      image.addEventListener('touchstart', useDblTouch, { signal });
+    }
+
+    if (!IS_TOUCH && dblClickable && image) {
+      const useDblClick = (e: MouseEvent) => this.#useDblClick(e);
+      image.addEventListener('dblclick', useDblClick, { signal })
     }
 
     // resize observer
