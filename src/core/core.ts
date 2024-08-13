@@ -155,7 +155,10 @@ class Zoomist {
       containerData: {
         width: containerWidth,
         height: containerHeight
-      }
+      },
+      dblTouchData: {
+        lastTouchTime: 0
+      },
     }
 
     if (IS_TOUCH && (draggable || pinchable)) {
@@ -319,8 +322,8 @@ class Zoomist {
 
   // resize, drag, pinch, wheel
   #interact() {
-    const { element, wrapper, options, controller: { signal } } = this
-    const { draggable, pinchable, wheelable } = options
+    const { element, image, wrapper, options, controller: { signal } } = this
+    const { draggable, pinchable, wheelable, dblClickable } = options
 
     this.states = {}
 
@@ -350,6 +353,16 @@ class Zoomist {
       const useDrag = (e: MouseEvent) => this.#useDrag(e)
 
       element.addEventListener('mousedown', useDrag, { signal })
+    }
+
+    if (IS_TOUCH && dblClickable && image) {
+      const useDblTouch = (e: TouchEvent) => this.#useDblTouch(e);
+      image.addEventListener('touchstart', useDblTouch, { signal });
+    }
+
+    if (!IS_TOUCH && dblClickable && image) {
+      const useDblClick = (e: MouseEvent) => this.#useDblClick(e);
+      image.addEventListener('dblclick', useDblClick, { signal })
     }
 
     // resize observer
@@ -385,6 +398,36 @@ class Zoomist {
     this.zoom(delta * zoomRatio, getPointer(e))
 
     this.emit('wheel', this, this.transform.scale, e)
+  }
+
+  #useDblClick(e: MouseEvent) {
+    e.preventDefault();
+    const {options: {dblClickZoomRatio}} = this
+    if (this.isOnMinScale()) {
+      this.zoom(dblClickZoomRatio, getPointer(e))
+    } else {
+      this.zoom(-1);
+    }
+    this.emit('dblClick', this, this.transform.scale, e)
+  }
+
+  #useDblTouch(e: TouchEvent) {
+    e.preventDefault();
+    if (e.touches.length !== 1) {
+      return;
+    }
+    if (Date.now() - this.data.dblTouchData.lastTouchTime < 300) {
+      const {options: {dblClickZoomRatio}} = this
+      if (this.isOnMinScale()) {
+        this.zoom(dblClickZoomRatio, getPointer(e))
+      } else {
+        this.zoom(-1);
+      }
+      this.data.dblTouchData.lastTouchTime = 0;
+      this.emit('dblClick', this, this.transform.scale, e);
+    } else {
+      this.data.dblTouchData.lastTouchTime = Date.now();
+    }
   }
 
   // on drag (mouse)
@@ -717,7 +760,7 @@ class Zoomist {
     if (!sliderEl || !sliderTrack) return;
 
     const isVertical = direction === 'vertical'
-    
+
     const getScale = (e: MouseEvent | AppTouchEvent): number => {
       const wrapperRect = getBoundingRect(sliderTrack)
       const total = wrapperRect[isVertical ? 'height' : 'width']
@@ -814,7 +857,7 @@ class Zoomist {
     const zoomerInEl = createZoomerEl(inEl, 'button', CLASS_ZOOMER_IN, ATTR_ZOOMER_IN, zoomerIconIn)
     const zoomerOutEl = createZoomerEl(outEl, 'button', CLASS_ZOOMER_OUT, ATTR_ZOOMER_OUT, zoomerIconOut)
     const zoomerResetEl = createZoomerEl(resetEl, 'button', CLASS_ZOOMER_RESET, ATTR_ZOOMER_RESET, zoomerIconReset);
-    
+
     setObject(zoomer, {
       controller: new AbortController(),
       zoomerEl,
