@@ -92,8 +92,6 @@ export const ZOOMIST_EVENTS: ZoomistEvents = {
   destroy: null,
   // invoked after double click on image
   dblClick: null,
-  // same as dblClick but for mobile
-  dblTouch: null,
   // invoked before update methods be used
   beforeUpdate: null,
   // invoked when update methods be used

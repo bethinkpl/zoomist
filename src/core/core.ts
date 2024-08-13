@@ -424,7 +424,7 @@ class Zoomist {
         this.zoom(-1);
       }
       this.data.dblTouchData.lastTouchTime = 0;
-      this.emit('dblTouch', this, this.transform.scale, e);
+      this.emit('dblClick', this, this.transform.scale, e);
     } else {
       this.data.dblTouchData.lastTouchTime = Date.now();
     }

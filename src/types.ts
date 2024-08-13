@@ -43,8 +43,7 @@ export interface ZoomerOptions {
 
 
 export interface EventOptions {
-  dblClick: (zoomist: Zoomist, scale: number, event: MouseEvent) => void
-  dblTouch: (zoomist: Zoomist, scale: number, event: TouchEvent) => void
+  dblClick: (zoomist: Zoomist, scale: number, event: MouseEvent | TouchEvent) => void
   drag: (zoomist: Zoomist, transform: { x: number; y: number }, event: Event) => void
   dragStart: (zoomist: Zoomist, transform: { x: number; y: number }, event: Event) => void
   dragEnd: (zoomist: Zoomist, transform: { x: number; y: number }, event: Event) => void
