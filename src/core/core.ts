@@ -399,7 +399,6 @@ class Zoomist {
 
   #useDblClick(e: MouseEvent) {
     e.preventDefault();
-    setStyle(this.image, {transition: 'transform ease 0.3s'});
     const {options: {dbClickZoomRatio}} = this
     if (this.isOnMinScale()) {
       this.zoom(dbClickZoomRatio, getPointer(e))
@@ -407,7 +406,6 @@ class Zoomist {
       this.zoom(-1);
     }
     this.emit('dblClick', this, this.transform.scale, e)
-    setTimeout(() => setStyle(this.image, {transition: ''}), 300)
   }
 
   #useDblTouch(e: TouchEvent) {
@@ -416,7 +414,6 @@ class Zoomist {
       return;
     }
     if (Date.now() - this.data.dblTouchData.lastTouchTime < 300) {
-      setStyle(this.image, {transition: 'transform ease 0.3s'});
       const {options: {dbClickZoomRatio}} = this
       if (this.isOnMinScale()) {
         this.zoom(dbClickZoomRatio, getPointer(e))
@@ -425,7 +422,6 @@ class Zoomist {
       }
       this.data.dblTouchData.lastTouchTime = 0;
       this.emit('dblTouch', this, this.transform.scale, e);
-      setTimeout(() => setStyle(this.image, {transition: ''}), 300);
     } else {
       this.data.dblTouchData.lastTouchTime = Date.now();
     }
@@ -761,7 +757,7 @@ class Zoomist {
     if (!sliderEl || !sliderTrack) return;
 
     const isVertical = direction === 'vertical'
-    
+
     const getScale = (e: MouseEvent | AppTouchEvent): number => {
       const wrapperRect = getBoundingRect(sliderTrack)
       const total = wrapperRect[isVertical ? 'height' : 'width']
@@ -858,7 +854,7 @@ class Zoomist {
     const zoomerInEl = createZoomerEl(inEl, 'button', CLASS_ZOOMER_IN, ATTR_ZOOMER_IN, zoomerIconIn)
     const zoomerOutEl = createZoomerEl(outEl, 'button', CLASS_ZOOMER_OUT, ATTR_ZOOMER_OUT, zoomerIconOut)
     const zoomerResetEl = createZoomerEl(resetEl, 'button', CLASS_ZOOMER_RESET, ATTR_ZOOMER_RESET, zoomerIconReset);
-    
+
     setObject(zoomer, {
       controller: new AbortController(),
       zoomerEl,
