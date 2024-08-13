@@ -10,7 +10,7 @@ export interface ZoomistDefaultOptions {
   wheelable: boolean
   pinchable: boolean
   bounds: boolean
-  dbClickZoomRatio: number
+  dblClickZoomRatio: number
   zoomRatio: number
   minScale: number
   maxScale: number

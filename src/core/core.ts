@@ -402,9 +402,9 @@ class Zoomist {
 
   #useDblClick(e: MouseEvent) {
     e.preventDefault();
-    const {options: {dbClickZoomRatio}} = this
+    const {options: {dblClickZoomRatio}} = this
     if (this.isOnMinScale()) {
-      this.zoom(dbClickZoomRatio, getPointer(e))
+      this.zoom(dblClickZoomRatio, getPointer(e))
     } else {
       this.zoom(-1);
     }
@@ -417,9 +417,9 @@ class Zoomist {
       return;
     }
     if (Date.now() - this.data.dblTouchData.lastTouchTime < 300) {
-      const {options: {dbClickZoomRatio}} = this
+      const {options: {dblClickZoomRatio}} = this
       if (this.isOnMinScale()) {
-        this.zoom(dbClickZoomRatio, getPointer(e))
+        this.zoom(dblClickZoomRatio, getPointer(e))
       } else {
         this.zoom(-1);
       }

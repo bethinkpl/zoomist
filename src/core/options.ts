@@ -31,7 +31,7 @@ export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
   // the ratio of zooming at one time
   zoomRatio: 0.1,
   // the ratio of zooming when double-clicked on image
-  dbClickZoomRatio: 1,
+  dblClickZoomRatio: 1,
   // the max scale of zoomist-image (must be number larger then initScale)
   maxScale: 10,
   // the min scale of zoomist-image (must be number smaller then initScale)
