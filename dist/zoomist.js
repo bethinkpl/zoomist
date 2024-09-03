@@ -505,7 +505,8 @@ G = new WeakSet(), Lt = function() {
   const { element: t, image: e, options: { minScale: n, maxScale: o, initScale: r }, __modules__: { slider: a, zoomer: c } } = this, h = this;
   C(e, {
     transform: `
-        translate3d(var(${Yt}, 0px), var(${Rt}, 0px), 0)
+        translateX(var(${Yt}, 0px))
+        translateY(var(${Rt}, 0px))
         scale(var(${wt}, 0))`
   }), k(this.transform, "scale", {
     get() {
