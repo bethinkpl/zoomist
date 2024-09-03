@@ -590,8 +590,9 @@ G = new WeakSet(), Lt = function() {
   const { options: { dblClickZoomRatio: e } } = this;
   this.isOnMinScale() ? this.zoom(e, D(t)) : this.zoom(-1), this.emit("dblClick", this, this.transform.scale, t);
 }, K = new WeakSet(), It = function(t) {
-  if (t.preventDefault(), t.touches.length === 1)
+  if (t.touches.length === 1)
     if (Date.now() - this.data.dblTouchData.lastTouchTime < 300) {
+      t.preventDefault();
       const { options: { dblClickZoomRatio: e } } = this;
       this.isOnMinScale() ? this.zoom(e, D(t)) : this.zoom(-1), this.data.dblTouchData.lastTouchTime = 0, this.emit("dblClick", this, this.transform.scale, t);
     } else

@@ -413,11 +413,11 @@ class Zoomist {
   }
 
   #useDblTouch(e: TouchEvent) {
-    e.preventDefault();
     if (e.touches.length !== 1) {
       return;
     }
     if (Date.now() - this.data.dblTouchData.lastTouchTime < 300) {
+      e.preventDefault();
       const {options: {dblClickZoomRatio}} = this
       if (this.isOnMinScale()) {
         this.zoom(dblClickZoomRatio, getPointer(e))
