@@ -222,7 +222,8 @@ class Zoomist {
 
     setStyle(image, {
       transform: `
-        translate3d(var(${CSSVAR_IMAGE_TRANSLATE_X}, 0px), var(${CSSVAR_IMAGE_TRANSLATE_Y}, 0px), 0)
+        translateX(var(${CSSVAR_IMAGE_TRANSLATE_X}, 0px))
+        translateY(var(${CSSVAR_IMAGE_TRANSLATE_Y}, 0px))
         scale(var(${CSSVAR_IMAGE_SCALE}, 0))`
     })
 
