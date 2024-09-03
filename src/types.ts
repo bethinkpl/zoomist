@@ -5,6 +5,7 @@ export interface ZoomistHTMLElement extends HTMLElement {
 }
 
 export interface ZoomistDefaultOptions {
+  clickable: boolean
   dblClickable: boolean
   draggable: boolean
   wheelable: boolean
