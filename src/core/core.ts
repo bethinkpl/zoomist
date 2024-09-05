@@ -413,11 +413,11 @@ class Zoomist {
   }
 
   #useDblTouch(e: TouchEvent) {
-    e.preventDefault();
     if (e.touches.length !== 1) {
       return;
     }
     if (Date.now() - this.data.dblTouchData.lastTouchTime < 300) {
+      e.preventDefault();
       const {options: {dblClickZoomRatio}} = this
       if (this.isOnMinScale()) {
         this.zoom(dblClickZoomRatio, getPointer(e))
@@ -499,7 +499,7 @@ class Zoomist {
 
   // on touch (pinch and touchmove)
   #useTouch(e: AppTouchEvent) {
-    const { data, transform, options: { maxScale, minScale, draggable, pinchable, bounds, dragReleaseOnBounds, disableDraggingClass } } = this
+    const { data, transform, options: { maxScale, minScale, draggable, pinchable, bounds, dragReleaseOnBounds, disableDraggingClass, allowTouchToBubble } } = this
     const { touchData, imageData } = data
 
     if (!touchData || !imageData) return;
@@ -518,8 +518,7 @@ class Zoomist {
         if (!releasable) {
           e.preventDefault()
         }
-      }
-      else {
+      } else if (!allowTouchToBubble) {
         e.preventDefault()
       }
 
