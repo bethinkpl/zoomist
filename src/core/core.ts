@@ -499,7 +499,7 @@ class Zoomist {
 
   // on touch (pinch and touchmove)
   #useTouch(e: AppTouchEvent) {
-    const { data, transform, options: { maxScale, minScale, draggable, pinchable, bounds, dragReleaseOnBounds, disableDraggingClass, clickable } } = this
+    const { data, transform, options: { maxScale, minScale, draggable, pinchable, bounds, dragReleaseOnBounds, disableDraggingClass, allowTouchToBubble } } = this
     const { touchData, imageData } = data
 
     if (!touchData || !imageData) return;
@@ -518,7 +518,7 @@ class Zoomist {
         if (!releasable) {
           e.preventDefault()
         }
-      } else if (!clickable) {
+      } else if (!allowTouchToBubble) {
         e.preventDefault()
       }
 

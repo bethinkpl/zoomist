@@ -3,7 +3,7 @@ export interface ZoomistHTMLElement extends HTMLElement {
     zoomist: Zoomist | null;
 }
 export interface ZoomistDefaultOptions {
-    clickable: boolean;
+    allowTouchToBubble: boolean;
     dblClickable: boolean;
     draggable: boolean;
     wheelable: boolean;

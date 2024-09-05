@@ -19,7 +19,7 @@ import {
 
 export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
   // set is clickable or not
-  clickable: false,
+  allowTouchToBubble: false,
   // set is dblClickable or not
   dblClickable: false,
   // set is draggable or not
