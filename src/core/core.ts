@@ -323,7 +323,7 @@ class Zoomist {
 
   // resize, drag, pinch, wheel
   #interact() {
-    const { element, image, wrapper, options, controller: { signal } } = this
+    const { element, wrapper, options, controller: { signal } } = this
     const { draggable, pinchable, wheelable, dblClickable } = options
 
     this.states = {}
@@ -356,14 +356,14 @@ class Zoomist {
       element.addEventListener('mousedown', useDrag, { signal })
     }
 
-    if (IS_TOUCH && dblClickable && image) {
+    if (IS_TOUCH && dblClickable && wrapper) {
       const useDblTouch = (e: TouchEvent) => this.#useDblTouch(e);
-      image.addEventListener('touchstart', useDblTouch, { signal });
+      wrapper.addEventListener('touchstart', useDblTouch, { signal });
     }
 
-    if (!IS_TOUCH && dblClickable && image) {
+    if (!IS_TOUCH && dblClickable && wrapper) {
       const useDblClick = (e: MouseEvent) => this.#useDblClick(e);
-      image.addEventListener('dblclick', useDblClick, { signal })
+      wrapper.addEventListener('dblclick', useDblClick, { signal })
     }
 
     // resize observer
