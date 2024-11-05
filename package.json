@@ -1,6 +1,6 @@
 {
   "name": "zoomist-src",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "A TypeScript library for zooming any element. Also supports mobile devices.",
   "type": "module",
   "files": ["dist"],
