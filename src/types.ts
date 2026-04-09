@@ -18,6 +18,7 @@ export interface ZoomistDefaultOptions {
   initScale: number | null
   dragReleaseOnBounds: boolean
   wheelReleaseOnMinMax: boolean
+  panAtMinScale: boolean
   disableDraggingClass: string
   disableWheelingClass: string
   slider?: boolean | SliderOptions

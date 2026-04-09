@@ -44,6 +44,8 @@ export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
   dragReleaseOnBounds: false,
   // if set to true, enable to release wheel events to allow for further page scrolling when .zoomist-image is on mixScale or maxScale.
   wheelReleaseOnMinMax: false,
+  // if set to true, allow panning image when image overflows wrapper at min scale (e.g. fitOrientation mode)
+  panAtMinScale: false,
   // elements matched this class will not be dragged.
   disableDraggingClass: CLASS_NOT_DRAGGABLE,
   // elements matched this class will not be zoomed by mouse wheel.
