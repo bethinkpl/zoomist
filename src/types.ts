@@ -16,6 +16,7 @@ export interface ZoomistDefaultOptions {
   minScale: number
   maxScale: number
   initScale: number | null
+  initialAlign: InitialAlign | null
   dragReleaseOnBounds: boolean
   wheelReleaseOnMinMax: boolean
   panAtMinScale: boolean
@@ -223,6 +224,11 @@ export type MoveToKeywordsY = 'top' | 'bottom' | 'center'
 export interface MoveToParams {
   x?: number | MoveToKeywordsX
   y?: number | MoveToKeywordsY
+}
+
+export interface InitialAlign {
+  x?: MoveToKeywordsX
+  y?: MoveToKeywordsY
 }
 
 export type AppTouchEvent = TouchEvent;
