@@ -69,6 +69,8 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     ratio = this.useFixedRatio(ratio)
     if (ratio === scale) return this
 
+    const prevDiff = this.getImageDiff()
+
     this.transform.scale = ratio
 
     if (!pointer) {
@@ -82,15 +84,28 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     const { clientX, clientY } = pointer
     const { top: imageTop, left: imageLeft, width: imageWidth, height: imageHeight } = getBoundingRect(image)
     const { width: widthDiff, height: heightDiff } = this.getImageDiff()
-    const scaleDiff = ratio / scale - 1
-    const distanceX = (imageWidth / 2 - clientX + imageLeft) * scaleDiff + oldTranslateX
-    const distanceY = (imageHeight / 2 - clientY + imageTop) * scaleDiff + oldTranslateY
     const { panAtMinScale } = this.options
     const isAtMinScale = this.isOnMinScale()
-    const effectiveWidthDiff = (bounds && isAtMinScale && !panAtMinScale) ? 0 : widthDiff
-    const effectiveHeightDiff = (bounds && isAtMinScale && !panAtMinScale) ? 0 : heightDiff
-    const translateX = bounds ? minmax(distanceX, effectiveWidthDiff, -effectiveWidthDiff) : distanceX
-    const translateY = bounds ? minmax(distanceY, effectiveHeightDiff, -effectiveHeightDiff) : distanceY
+
+    let translateX: number
+    let translateY: number
+
+    if (bounds && panAtMinScale) {
+      const clampW = Math.min(widthDiff, 0)
+      const clampH = Math.min(heightDiff, 0)
+      const newX = clampW < 0 && prevDiff.width < 0 ? oldTranslateX * (clampW / prevDiff.width) : 0
+      const newY = clampH < 0 && prevDiff.height < 0 ? oldTranslateY * (clampH / prevDiff.height) : 0
+      translateX = minmax(newX, clampW, -clampW)
+      translateY = minmax(newY, clampH, -clampH)
+    } else {
+      const scaleDiff = ratio / scale - 1
+      const distanceX = (imageWidth / 2 - clientX + imageLeft) * scaleDiff + oldTranslateX
+      const distanceY = (imageHeight / 2 - clientY + imageTop) * scaleDiff + oldTranslateY
+      const effectiveWidthDiff = (bounds && isAtMinScale && !panAtMinScale) ? 0 : widthDiff
+      const effectiveHeightDiff = (bounds && isAtMinScale && !panAtMinScale) ? 0 : heightDiff
+      translateX = bounds ? minmax(distanceX, effectiveWidthDiff, -effectiveWidthDiff) : distanceX
+      translateY = bounds ? minmax(distanceY, effectiveHeightDiff, -effectiveHeightDiff) : distanceY
+    }
 
     setObject(this.transform, {
       translateX,
@@ -130,8 +145,8 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     const { x, y } = params
     const { width: widthDiff, height: heightDiff } = this.getImageDiff()
 
-    const effectiveWidthDiff = (bounds && this.isOnMinScale() && !panAtMinScale) ? 0 : widthDiff
-    const effectiveHeightDiff = (bounds && this.isOnMinScale() && !panAtMinScale) ? 0 : heightDiff
+    const effectiveWidthDiff = (bounds && this.isOnMinScale() && !panAtMinScale) ? 0 : Math.min(widthDiff, 0)
+    const effectiveHeightDiff = (bounds && this.isOnMinScale() && !panAtMinScale) ? 0 : Math.min(heightDiff, 0)
 
     // x is number | string-number
     if (isNumber(x)) {
