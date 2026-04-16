@@ -102,7 +102,7 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
         translateY = (imageHeight / 2 - clientY + imageTop) * scaleDiff + oldTranslateY
       }
     } else {
-      // 100% original pre-PR logic
+      // original logic before introducing `panAtMinScale`
       const scaleDiff = ratio / scale - 1
       const distanceX = (imageWidth / 2 - clientX + imageLeft) * scaleDiff + oldTranslateX
       const distanceY = (imageHeight / 2 - clientY + imageTop) * scaleDiff + oldTranslateY
