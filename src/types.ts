@@ -99,6 +99,7 @@ export interface ZoomistMethods {
   isOnMinScale: () => boolean
   isOnMaxScale: () => boolean
   getImageDiff: () => { width: number, height: number }
+  getClampedImageDiff: () => { width: number, height: number }
   getContainerCenterClient: () => { clientX: number, clientY: number }
   getScaleRatio: () => number
   useFixedRatio: (ratio: number) => number

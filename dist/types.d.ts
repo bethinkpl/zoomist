@@ -107,6 +107,10 @@ export interface ZoomistMethods {
         width: number;
         height: number;
     };
+    getClampedImageDiff: () => {
+        width: number;
+        height: number;
+    };
     getContainerCenterClient: () => {
         clientX: number;
         clientY: number;
