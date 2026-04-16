@@ -69,6 +69,8 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     ratio = this.useFixedRatio(ratio)
     if (ratio === scale) return this
 
+    const prevDiff = this.getImageDiff()
+
     this.transform.scale = ratio
 
     if (!pointer) {
@@ -82,11 +84,31 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     const { clientX, clientY } = pointer
     const { top: imageTop, left: imageLeft, width: imageWidth, height: imageHeight } = getBoundingRect(image)
     const { width: widthDiff, height: heightDiff } = this.getImageDiff()
-    const scaleDiff = ratio / scale - 1
-    const distanceX = (imageWidth / 2 - clientX + imageLeft) * scaleDiff + oldTranslateX
-    const distanceY = (imageHeight / 2 - clientY + imageTop) * scaleDiff + oldTranslateY
-    const translateX = bounds ? minmax(distanceX, widthDiff, -widthDiff) : distanceX
-    const translateY = bounds ? minmax(distanceY, heightDiff, -heightDiff) : distanceY
+    const { panAtMinScale } = this.options
+
+    let translateX: number
+    let translateY: number
+
+    if (panAtMinScale) {
+      const { width: clampW, height: clampH } = this.getClampedImageDiff()
+      if (bounds) {
+        const newX = clampW < 0 && prevDiff.width < 0 ? oldTranslateX * (clampW / prevDiff.width) : 0
+        const newY = clampH < 0 && prevDiff.height < 0 ? oldTranslateY * (clampH / prevDiff.height) : 0
+        translateX = minmax(newX, clampW, -clampW)
+        translateY = minmax(newY, clampH, -clampH)
+      } else {
+        const scaleDiff = ratio / scale - 1
+        translateX = (imageWidth / 2 - clientX + imageLeft) * scaleDiff + oldTranslateX
+        translateY = (imageHeight / 2 - clientY + imageTop) * scaleDiff + oldTranslateY
+      }
+    } else {
+      // original logic before introducing `panAtMinScale`
+      const scaleDiff = ratio / scale - 1
+      const distanceX = (imageWidth / 2 - clientX + imageLeft) * scaleDiff + oldTranslateX
+      const distanceY = (imageHeight / 2 - clientY + imageTop) * scaleDiff + oldTranslateY
+      translateX = bounds ? minmax(distanceX, widthDiff, -widthDiff) : distanceX
+      translateY = bounds ? minmax(distanceY, heightDiff, -heightDiff) : distanceY
+    }
 
     setObject(this.transform, {
       translateX,
@@ -101,18 +123,16 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   move(params) {
     const { options: { bounds }, transform: { translateX: oldTranslateX, translateY: oldTanslateY } } = this
     const { x, y } = params
-    const { width: widthDiff, height: heightDiff } = this.getImageDiff()
+    const { width: clampW, height: clampH } = this.getClampedImageDiff()
 
     if (isNumber(x)) {
       const distanceX = oldTranslateX + x
-      const translateX = bounds ? minmax(distanceX, widthDiff, -widthDiff) : distanceX
-      this.transform.translateX = translateX
+      this.transform.translateX = bounds ? minmax(distanceX, clampW, -clampW) : distanceX
     }
 
     if (isNumber(y)) {
       const distanceY = oldTanslateY + y
-      const translateY = bounds ? minmax(distanceY, heightDiff, -heightDiff) : distanceY
-      this.transform.translateY = translateY
+      this.transform.translateY = bounds ? minmax(distanceY, clampH, -clampH) : distanceY
     }
 
     return this
@@ -121,42 +141,26 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   moveTo(params) {
     const { options: { bounds } } = this
     const { x, y } = params
-    const { width: widthDiff, height: heightDiff } = this.getImageDiff()
+    const { width: clampW, height: clampH } = this.getClampedImageDiff()
 
     // x is number | string-number
     if (isNumber(x)) {
-      const parseX = Number(x)
-      const translateX = bounds ? minmax(parseX, widthDiff, -widthDiff) : parseX
-      this.transform.translateX = translateX
+      this.transform.translateX = bounds ? minmax(Number(x), clampW, -clampW) : Number(x)
     }
 
     // x is one of keywords
     if (MOVE_TO_KEYWORDS_X.some(item => item === x)) {
-      const keywordsValue = {
-        left: -widthDiff,
-        right: widthDiff,
-        center: 0
-      }
-      const translateX = keywordsValue[x as MoveToKeywordsX]
-      this.transform.translateX = translateX
+      this.transform.translateX = { left: -clampW, right: clampW, center: 0 }[x as MoveToKeywordsX]
     }
 
     // y is number | string-number
     if (isNumber(y)) {
-      const parseY = Number(y)
-      const translateY = bounds ? minmax(parseY, heightDiff, -heightDiff) : parseY
-      this.transform.translateY = translateY
+      this.transform.translateY = bounds ? minmax(Number(y), clampH, -clampH) : Number(y)
     }
 
     // y is one of keywords
     if (MOVE_TO_KEYWORDS_Y.some(item => item === y)) {
-      const keywordsValue = {
-        top: -heightDiff,
-        bottom: heightDiff,
-        center: 0
-      }
-      const translateY = keywordsValue[y as MoveToKeywordsY]
-      this.transform.translateY = translateY
+      this.transform.translateY = { top: -clampH, bottom: clampH, center: 0 }[y as MoveToKeywordsY]
     }
 
     return this
@@ -319,6 +323,15 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     return scale === maxScale
   },
 
+
+  // private methods
+  getClampedImageDiff() {
+    const { width, height } = this.getImageDiff()
+    return {
+      width: Math.min(width, 0),
+      height: Math.min(height, 0)
+    }
+  },
 
   // private methods
   getImageDiff() {

@@ -14,8 +14,10 @@ export interface ZoomistDefaultOptions {
     minScale: number;
     maxScale: number;
     initScale: number | null;
+    initialAlign: InitialAlign | null;
     dragReleaseOnBounds: boolean;
     wheelReleaseOnMinMax: boolean;
+    panAtMinScale: boolean;
     disableDraggingClass: string;
     disableWheelingClass: string;
     slider?: boolean | SliderOptions;
@@ -102,6 +104,10 @@ export interface ZoomistMethods {
     isOnMinScale: () => boolean;
     isOnMaxScale: () => boolean;
     getImageDiff: () => {
+        width: number;
+        height: number;
+    };
+    getClampedImageDiff: () => {
         width: number;
         height: number;
     };
@@ -207,5 +213,9 @@ export type MoveToKeywordsY = 'top' | 'bottom' | 'center';
 export interface MoveToParams {
     x?: number | MoveToKeywordsX;
     y?: number | MoveToKeywordsY;
+}
+export interface InitialAlign {
+    x?: MoveToKeywordsX;
+    y?: MoveToKeywordsY;
 }
 export type AppTouchEvent = TouchEvent;

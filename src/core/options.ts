@@ -40,10 +40,14 @@ export const DEFAULT_OPTIONS: ZoomistDefaultOptions = {
   minScale: 1,
   // set initial scale of zoomist-image
   initScale: null,
+  // set initial alignment of zoomist-image: { x?: 'left'|'center'|'right', y?: 'top'|'center'|'bottom' }
+  initialAlign: null,
   // if set to true, enable to release touch events to allow for further page scrolling when .zoomist-image is on bounds.
   dragReleaseOnBounds: false,
   // if set to true, enable to release wheel events to allow for further page scrolling when .zoomist-image is on mixScale or maxScale.
   wheelReleaseOnMinMax: false,
+  // if set to true, allow panning image when image overflows wrapper at min scale (e.g. fitOrientation mode)
+  panAtMinScale: false,
   // elements matched this class will not be dragged.
   disableDraggingClass: CLASS_NOT_DRAGGABLE,
   // elements matched this class will not be zoomed by mouse wheel.

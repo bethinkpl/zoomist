@@ -316,6 +316,10 @@ class Zoomist {
 
     element.classList.add(CLASS_CONTAINER)
 
+    if (this.options.initialAlign) {
+      this.moveTo(this.options.initialAlign)
+    }
+
     this.mounted = true
 
     this.emit('ready', this)
