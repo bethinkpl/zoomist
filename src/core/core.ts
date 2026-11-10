@@ -43,6 +43,9 @@ import {
   CSSVAR_IMAGE_TRANSLATE_X,
   CSSVAR_IMAGE_TRANSLATE_Y,
   CSSVAR_IMAGE_SCALE,
+  CSSVAR_WRAPPER_IMAGE_TRANSLATE_X,
+  CSSVAR_WRAPPER_IMAGE_TRANSLATE_Y,
+  CSSVAR_WRAPPER_IMAGE_SCALE,
   CSSVAR_SLIDER_VALUE,
   CLASS_SLIDER,
   CLASS_SLIDER_TRACK,
@@ -217,7 +220,7 @@ class Zoomist {
   #mount() {
     if (this.mounted) return;
 
-    const { element, image, options: { minScale, maxScale, initScale }, __modules__: { slider, zoomer } } = this
+    const { element, wrapper, image, options: { minScale, maxScale, initScale }, __modules__: { slider, zoomer } } = this
     const zoomist = this
 
     setStyle(image, {
@@ -239,6 +242,7 @@ class Zoomist {
         zoomist.transform.__scale__ = scale
 
         setStyle(image, { [CSSVAR_IMAGE_SCALE]: scale.toString() })
+        setStyle(wrapper, { [CSSVAR_WRAPPER_IMAGE_SCALE]: scale.toString() })
 
         setObject(zoomist.data.imageData, {
           width: getBoundingRect(image).width,
@@ -283,6 +287,7 @@ class Zoomist {
         zoomist.transform.__translateX__ = translateX
 
         setStyle(image, { [CSSVAR_IMAGE_TRANSLATE_X]: `${translateX}px` })
+        setStyle(wrapper, { [CSSVAR_WRAPPER_IMAGE_TRANSLATE_X]: `${translateX}px` })
       },
     })
 
@@ -298,6 +303,7 @@ class Zoomist {
         zoomist.transform.__translateY__ = translateY
 
         setStyle(image, { [CSSVAR_IMAGE_TRANSLATE_Y]: `${translateY}px` })
+        setStyle(wrapper, { [CSSVAR_WRAPPER_IMAGE_TRANSLATE_Y]: `${translateY}px` })
       },
     })
 

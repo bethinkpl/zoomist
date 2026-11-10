@@ -17,6 +17,9 @@ import {
   isPlainObject
 } from './../shared/utils'
 import {
+  CSSVAR_WRAPPER_IMAGE_SCALE,
+  CSSVAR_WRAPPER_IMAGE_TRANSLATE_X,
+  CSSVAR_WRAPPER_IMAGE_TRANSLATE_Y,
   MOVE_TO_KEYWORDS_X,
   MOVE_TO_KEYWORDS_Y,
   NAME
@@ -190,7 +193,7 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
   },
 
   destroy(cleanStyle = false) {
-    const { element, image, controller } = this
+    const { element, wrapper, image, controller } = this
 
     if (!this.mounted) return null;
 
@@ -202,6 +205,10 @@ export const ZOOMIST_METHODS: ZoomistMethods & ThisType<Zoomist> = {
     if (cleanStyle && image) {
       this.reset()
       image.removeAttribute('style')
+      // Only zoomist's own properties: the rest of the wrapper's inline style belongs to the page
+      for (const property of [CSSVAR_WRAPPER_IMAGE_SCALE, CSSVAR_WRAPPER_IMAGE_TRANSLATE_X, CSSVAR_WRAPPER_IMAGE_TRANSLATE_Y]) {
+        wrapper.style.removeProperty(property)
+      }
     }
 
     (element as ZoomistHTMLElement)[NAME] = null

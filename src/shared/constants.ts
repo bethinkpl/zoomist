@@ -77,4 +77,8 @@ export const MOVE_TO_KEYWORDS_Y: [MoveToKeywordsY, ...MoveToKeywordsY[]] = ['top
 export const CSSVAR_IMAGE_SCALE: string = '--scale'
 export const CSSVAR_IMAGE_TRANSLATE_X: string = '--translate-x'
 export const CSSVAR_IMAGE_TRANSLATE_Y: string = '--translate-y'
+// Copies of the image's transform on the wrapper, so that siblings of the image (e.g. an overlay) inherit them
+export const CSSVAR_WRAPPER_IMAGE_SCALE: string = `--${NAME}-image-scale`
+export const CSSVAR_WRAPPER_IMAGE_TRANSLATE_X: string = `--${NAME}-image-translate-x`
+export const CSSVAR_WRAPPER_IMAGE_TRANSLATE_Y: string = `--${NAME}-image-translate-y`
 export const CSSVAR_SLIDER_VALUE: string = '--value'

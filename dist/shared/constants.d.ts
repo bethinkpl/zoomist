@@ -34,4 +34,7 @@ export declare const MOVE_TO_KEYWORDS_Y: [MoveToKeywordsY, ...MoveToKeywordsY[]]
 export declare const CSSVAR_IMAGE_SCALE: string;
 export declare const CSSVAR_IMAGE_TRANSLATE_X: string;
 export declare const CSSVAR_IMAGE_TRANSLATE_Y: string;
+export declare const CSSVAR_WRAPPER_IMAGE_SCALE: string;
+export declare const CSSVAR_WRAPPER_IMAGE_TRANSLATE_X: string;
+export declare const CSSVAR_WRAPPER_IMAGE_TRANSLATE_Y: string;
 export declare const CSSVAR_SLIDER_VALUE: string;
